@@ -1,0 +1,25 @@
+# Helm values for retail-store-sample-app
+namespace: retail-app
+
+# In-cluster dependencies (Default)
+# These will deploy MySQL, Redis, RabbitMQ etc. as pods in the retail-app namespace
+# To support Bonus 5.1, these would be disabled and redirected to RDS.
+
+tags:
+  - Project: Bedrock
+
+# Ensure all resources have the required tag
+# (Note: Helm charts vary in how they support global tags, 
+# usually handled via commonLabels or custom values)
+
+postgresql:
+  replicaCount: 1
+
+mysql:
+  replicaCount: 1
+
+redis:
+  replicaCount: 1
+
+rabbitmq:
+  replicaCount: 1
