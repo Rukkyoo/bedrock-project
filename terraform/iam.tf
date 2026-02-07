@@ -95,7 +95,7 @@ resource "aws_iam_policy" "ci_backend" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid = "S3StateBucket"
+        Sid    = "S3StateBucket"
         Effect = "Allow"
         Action = [
           "s3:ListBucket",
@@ -110,7 +110,7 @@ resource "aws_iam_policy" "ci_backend" {
         ]
       },
       {
-        Sid = "DynamoStateLock"
+        Sid    = "DynamoStateLock"
         Effect = "Allow"
         Action = [
           "dynamodb:DescribeTable",
