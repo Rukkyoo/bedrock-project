@@ -33,3 +33,14 @@ output "dev_secret_key" {
   value       = aws_iam_access_key.developer_key.secret
   sensitive   = true
 }
+
+output "ci_access_key" {
+  description = "Access Key ID for bedrock-ci user"
+  value       = aws_iam_access_key.ci_key.id
+}
+
+output "ci_secret_key" {
+  description = "Secret Access Key for bedrock-ci user"
+  value       = aws_iam_access_key.ci_key.secret
+  sensitive   = true
+}
