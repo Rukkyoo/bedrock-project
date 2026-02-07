@@ -78,3 +78,57 @@ resource "aws_iam_user_policy_attachment" "developer_read_only" {
 resource "aws_iam_access_key" "developer_key" {
   user = aws_iam_user.developer.name
 }
+
+# CI IAM User (backend access for Terraform)
+data "aws_caller_identity" "current" {}
+
+resource "aws_iam_user" "ci" {
+  name = "bedrock-ci"
+  tags = var.common_tags
+}
+
+resource "aws_iam_policy" "ci_backend" {
+  name        = "${var.cluster_name}-ci-backend"
+  description = "Allow Terraform backend access to S3 state bucket and DynamoDB lock table"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid = "S3StateBucket"
+        Effect = "Allow"
+        Action = [
+          "s3:ListBucket",
+          "s3:GetBucketLocation",
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject"
+        ]
+        Resource = [
+          "arn:aws:s3:::project-bedrock-terraform-state-1166",
+          "arn:aws:s3:::project-bedrock-terraform-state-1166/*"
+        ]
+      },
+      {
+        Sid = "DynamoStateLock"
+        Effect = "Allow"
+        Action = [
+          "dynamodb:DescribeTable",
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:DeleteItem"
+        ]
+        Resource = "arn:aws:dynamodb:${var.region}:${data.aws_caller_identity.current.account_id}:table/terraform-lock-table"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_user_policy_attachment" "ci_backend" {
+  user       = aws_iam_user.ci.name
+  policy_arn = aws_iam_policy.ci_backend.arn
+}
+
+resource "aws_iam_access_key" "ci_key" {
+  user = aws_iam_user.ci.name
+}
