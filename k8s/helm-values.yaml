@@ -23,3 +23,11 @@ redis:
 
 rabbitmq:
   replicaCount: 1
+
+ui:
+  endpoints:
+    catalog: http://retail-app-catalog:80
+    carts: http://retail-app-carts:80
+    checkout: http://retail-app-checkout:80
+    orders: http://retail-app-orders:80
+    assets: http://retail-app-assets:80
