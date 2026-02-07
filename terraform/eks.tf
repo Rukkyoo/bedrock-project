@@ -27,23 +27,17 @@ resource "aws_eks_node_group" "this" {
 
   scaling_config {
     desired_size = 2
-    max_size     = 3
+    max_size     = 2
     min_size     = 1
   }
 
-  instance_types = ["t2.micro"]
+  instance_types = ["t3.small"]
 
   depends_on = [
     aws_iam_role_policy_attachment.nodes_AmazonEKSWorkerNodePolicy,
     aws_iam_role_policy_attachment.nodes_AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.nodes_AmazonEC2ContainerRegistryReadOnly,
   ]
-}
-
-# CloudWatch Observability EKS Add-on
-resource "aws_eks_addon" "cloudwatch_observability" {
-  cluster_name = aws_eks_cluster.this.name
-  addon_name   = "amazon-cloudwatch-observability"
 }
 
 # Map IAM user to K8s access entry (Modern EKS Access Management)
