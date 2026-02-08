@@ -75,9 +75,6 @@ resource "aws_iam_user_policy_attachment" "developer_read_only" {
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
 
-resource "aws_iam_access_key" "developer_key" {
-  user = aws_iam_user.developer.name
-}
 
 # CI IAM User (backend access for Terraform)
 data "aws_caller_identity" "current" {}
@@ -129,6 +126,3 @@ resource "aws_iam_user_policy_attachment" "ci_backend" {
   policy_arn = aws_iam_policy.ci_backend.arn
 }
 
-resource "aws_iam_access_key" "ci_key" {
-  user = aws_iam_user.ci.name
-}
